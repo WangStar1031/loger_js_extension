@@ -3,14 +3,15 @@ var reqUrl = "http://guu267.com/loger/api_context.php";
 
 function requestLogin(url,log1,pass1){
   var request = new XMLHttpRequest();
-  // request.open('GET',url+"?login="+log1+"&password="+pass1, false);
   request.open('GET',url+"?action=verifyUser&email="+log1+"&pass="+pass1, false);
   request.onreadystatechange = function (o){
       if(request.readyState === XMLHttpRequest.DONE && request.status === 200) {
         chrome.storage.sync.set({loger_token:request.responseText});
-        console.log(request.responseText);
-        //localStorage["ext_user_token1"] = JSON.parse(request.responseText).token
-        alert("DEBUG --" + request.responseText);
+        if( !request.responseText ){
+          alert("Login failed.");
+        } else{
+          alert("Successfully logged in.");
+        }
          
       }else if(request.readyState === XMLHttpRequest.DONE && request.status !== 200){
           console.log('ERROR REQUEST STATUS = ' + request.status);
