@@ -33,6 +33,8 @@
     "permissions": [
         "http://siblola.pythonanywhere.com/*",
         "https://siblola.pythonanywhere.com/*",
+        "http://guu267.com/*",
+        "https://guu267.com/*",
         "storage",
         "contextMenus",
         "activeTab",
