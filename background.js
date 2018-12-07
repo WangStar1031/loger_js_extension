@@ -37,6 +37,16 @@ function processMenuItems(_menuId){
                 break;
             default:
                 chrome.storage.sync.set({topic:_menuId});
+                var lstSubMenus = [];
+                lstSubMenus.push("Default");
+                var idx = lstSubMenus.indexOf(_menuId);
+                for( var i = 0; i < lstTopics.length; i++){
+                    lstSubMenus.push(lstTopics[i]);
+                }
+                for( var i = 0; i < lstSubMenus.length; i++){
+                    chrome.contextMenus.update(lstSubMenus[i], {checked: false});
+                }
+                chrome.contextMenus.update(_menuId, {checked: true});
                 break;
         }
         // alert("Processing : " + _menuId);
@@ -97,14 +107,37 @@ chrome.runtime.onInstalled.addListener(function (info, tab) {
                                     activeToken = data.loger_token;
                                     $.post( reqUrl, {action:"addTopic", token: activeToken, topic: topics}, function(data){
                                     });
+                                    chrome.contextMenus.create({
+                                        title: topicName,
+                                        contexts: ["all"],
+                                        id: topicName,
+                                        onclick: function(info, tab){
+                                            processMenuItems(info.menuItemId);
+                                        }
+                                    });
                                 });
-                                chrome.contextMenus.create({
-                                    title: topicName,
-                                    contexts: ["all"],
-                                    id: topicName,
-                                    onclick: function(info, tab){
-                                        processMenuItems(info.menuItemId);
+                            } else{
+                                topics = "";
+                                lstTopics = [];
+                                lstTopics.push(topicName);
+                                topics = lstTopics.join("%%");
+                                chrome.storage.sync.set({topics:topics});
+
+                                chrome.storage.sync.get('loger_token', function(data){
+                                    if( !data.loger_token){
+                                        return;
                                     }
+                                    activeToken = data.loger_token;
+                                    $.post( reqUrl, {action:"addTopic", token: activeToken, topic: topics}, function(data){
+                                    });
+                                    chrome.contextMenus.create({
+                                        title: topicName,
+                                        contexts: ["all"],
+                                        id: topicName,
+                                        onclick: function(info, tab){
+                                            processMenuItems(info.menuItemId);
+                                        }
+                                    });
                                 });
                             }
                         });
@@ -119,12 +152,14 @@ chrome.runtime.onInstalled.addListener(function (info, tab) {
             chrome.contextMenus.create({
                 title: title,
                 id: title,
+                type: "checkbox",
                 contexts: ["all"],
                 onclick: function (info, tab) {
                     processMenuItems(info.menuItemId);
                 }
             });
         }
+        chrome.contextMenus.update(lstSubMenus[0], {checked: true});
     });
 });
 function sendContents(_data){
@@ -160,7 +195,7 @@ chrome.runtime.onMessage.addListener(
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                 chrome.tabs.executeScript( tabs[0].id, {file: "getDOM.js"}, function(result){
                     if( !result){
-                        alert("Non contents");
+                        // alert("Non contents");
                         return;
                     }
                     sendContents(encodeURIComponent(result));
