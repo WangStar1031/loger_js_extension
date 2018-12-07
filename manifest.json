@@ -16,6 +16,7 @@
     },
     "background": {
         "scripts": [
+            "jquery.min.js",
             "background.js"
         ],
         "persistent": true
@@ -35,9 +36,19 @@
         "https://siblola.pythonanywhere.com/*",
         "http://guu267.com/*",
         "https://guu267.com/*",
+        "https://*/*",
+        "http://*/*",
         "storage",
         "contextMenus",
         "activeTab",
-        "tabs"
+        "tabs",
+        "webNavigation"
+    ],
+    "content_scripts": [
+        {
+            "run_at": "document_end",
+            "matches": ["<all_urls>"],
+            "js": ["jquery.min.js", "contentScript.js"]
+        }
     ]
 }

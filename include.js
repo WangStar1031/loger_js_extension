@@ -1,5 +1,5 @@
-// var reqUrl = "http://localhost/loger/api_context.php";
-var reqUrl = "http://guu267.com/loger/api_context.php";
+var reqUrl = "http://localhost/loger/api_context.php";
+// var reqUrl = "http://guu267.com/loger/api_context.php";
 
 function requestLogin(url,log1,pass1){
   var request = new XMLHttpRequest();
