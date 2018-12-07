@@ -1,5 +1,5 @@
-var reqUrl = "http://localhost/loger/api_context.php";
-// var reqUrl = "http://guu267.com/loger/api_context.php";
+// var reqUrl = "http://localhost/loger/api_context.php";
+var reqUrl = "http://guu267.com/loger/api_context.php";
 
 function requestContent(token, url, content) {
     var request = new XMLHttpRequest();
@@ -44,7 +44,7 @@ function processMenuItems(_menuId){
 }
 var topics = "";
 var lstTopics  = [];
-
+var topicName = "";
 chrome.runtime.onInstalled.addListener(function (info, tab) {
     // When the app gets installed, set up the context menus
 
@@ -79,7 +79,7 @@ chrome.runtime.onInstalled.addListener(function (info, tab) {
             id: "Create",
             contexts: ["all"],
             onclick: function (info, tab) {
-                var topicName = prompt("Please enter new Topic name", "New Topic");
+                topicName = prompt("Please enter new Topic name", "New Topic");
                 if (topicName != null) {
                     if( lstTopics.indexOf(topicName) == -1){
                         chrome.storage.sync.get('topics', function(data){
@@ -89,6 +89,15 @@ chrome.runtime.onInstalled.addListener(function (info, tab) {
                                 lstTopics.push(topicName);
                                 topics = lstTopics.join("%%");
                                 chrome.storage.sync.set({topics:topics});
+
+                                chrome.storage.sync.get('loger_token', function(data){
+                                    if( !data.loger_token){
+                                        return;
+                                    }
+                                    activeToken = data.loger_token;
+                                    $.post( reqUrl, {action:"addTopic", token: activeToken, topic: topics}, function(data){
+                                    });
+                                });
                                 chrome.contextMenus.create({
                                     title: topicName,
                                     contexts: ["all"],
@@ -135,7 +144,7 @@ function sendContents(_data){
                     strTopic = topic.topic;
                 }
                 $.post( reqUrl, {action:"addContents", token: activeToken, contents: _data, topic: strTopic}, function(data){
-                    // alert(data);
+                    alert(data);
                     if( data == "Invalid token"){
                         alert("Invalid token.\n Please login again.");
                     }
