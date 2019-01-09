@@ -1,7 +1,12 @@
-// var reqUrl = "http://localhost/loger/api_context.php";
-var reqUrl = "http://guu267.com/loger/api_context.php";
+var reqUrl = "http://localhost/loger/api_context.php";
+// var reqUrl = "http://guu267.com/loger/api_context.php";
 
 function requestContent(token, url, content) {
+    // $.get(url + "?action=addContents&token=" + token + "&contents=" + content, function(data){
+    //     if( window.confirm('OPEN NOTE ?')){
+    //         var newURL = data.responseText;
+    //     }
+    // });
     var request = new XMLHttpRequest();
     request.open('GET', url + "?action=addContents&token=" + token + "&contents=" + content, false);
     request.onreadystatechange = function (o) {
@@ -57,6 +62,8 @@ var lstTopics  = [];
 var topicName = "";
 chrome.runtime.onInstalled.addListener(function (info, tab) {
     // When the app gets installed, set up the context menus
+    var tmInstalled = new Date();
+    alert(tmInstalled);
 
     chrome.storage.sync.get('topics', function(data){
         var lstSubMenus = [];
@@ -71,6 +78,7 @@ chrome.runtime.onInstalled.addListener(function (info, tab) {
         chrome.contextMenus.create({
             title: "Start recording",
             id: "Start",
+            type: "radio",
             contexts: ["all"],
             onclick: function (info, tab) {
                 processMenuItems(info.menuItemId);
@@ -79,11 +87,17 @@ chrome.runtime.onInstalled.addListener(function (info, tab) {
         chrome.contextMenus.create({
             title: "Stop recording",
             id: "Stop",
+            type: "radio",
             contexts: ["all"],
             onclick: function (info, tab) {
                 processMenuItems(info.menuItemId);
             }
         });
+        // chrome.contextMenus.create({type:'separator'});
+        // chrome.contextMenus.create({
+        //     type: "separator"
+        // });
+        chrome.contextMenus.create({"title": "Separator Context Menu", "type": "separator"});
         chrome.contextMenus.create({
             title: "Create Topic",
             id: "Create",
@@ -92,6 +106,7 @@ chrome.runtime.onInstalled.addListener(function (info, tab) {
                 topicName = prompt("Please enter new Topic name", "New Topic");
                 if (topicName != null) {
                     if( lstTopics.indexOf(topicName) == -1){
+                        
                         chrome.storage.sync.get('topics', function(data){
                             if( data.topics){
                                 topics = data.topics;
@@ -202,4 +217,5 @@ chrome.runtime.onMessage.addListener(
                 });
             });
         }
-    });
+    }
+);

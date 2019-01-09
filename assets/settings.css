@@ -1,0 +1,66 @@
+
+	.hiddenItem{
+		display: none;
+	}
+	.topBar{
+		padding-top: 30px;
+		background-color: #53b8ee;
+		color: #eee;
+	}
+	select{
+		border: none;
+		background: transparent;
+	}
+	button.fa{
+		margin-right: 10px;
+	}
+	.topBar .btn-group{
+		color: #53b8ee;
+	}
+	select option{
+		color: black;
+	}
+	.catTabs{
+		margin-top: 20px;
+	}
+	.catTabs .activeTab, .contentTabs .activeTab{
+		color: #53b8ee;
+		border-bottom: 2px solid #53b8ee;
+	}
+	.catTabs .activeTab span, .contentTabs .activeTab span{
+		color: #53b8ee;
+	}
+	.catTabs > button, .contentTabs > button{
+		border-bottom: 2px solid #eee;
+		background-color: #fafafa;
+		padding: 6px 20px;
+		color: #aaa;
+	}
+	.catTabs button span, .contentTabs button span{
+		padding-left: 10px;
+		margin: 0px;
+	}
+	.mainContents{
+		background-color: #eee;
+		border-top: 1px solid #ccc;
+		padding-bottom: 15px;
+	}
+	.catContents{
+		margin-bottom: 15px;
+		background-color: white;
+	}
+	.caseTitle{
+		text-align: center;
+		font-size: 1.3em;
+	}
+	.catContents > div > div{
+		border-left: 1px solid #eee;
+		padding: 20px;
+	}
+	.caseContents{
+		text-align: center;
+		font-size: 5em;
+		background: linear-gradient(to bottom, #30CFD0 0%, #330867 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}

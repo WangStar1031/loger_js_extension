@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Logger Setting page</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script src="jquery.min.js"></script>
+	<script src="include.js"></script>
+	<title>Grabster</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/settings.css">
+	<link rel="stylesheet" href="assets/switchbutton.css">
+	<link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+</head>
+<style type="text/css">
+	#selTopic{
+		margin-left: 10px;
+	}
+</style>
+<body>
+	<div class="container">
+		<div class="topBar col-xs-12">
+			<div class="row">
+				<div class="col-xs-2">
+				</div>
+				<div class="col-xs-4">
+					<span>
+						<button class="btn btn-primary"> + </button>
+					</span>
+					<span>
+						<select id="selTopic"></select>
+					</span>
+				</div>
+				<div class="col-xs-6">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="catTabs btn-group">
+						<button class="btnCatTab activeTab"><i class="fa fa-briefcase"></i><span>Case</span></button>
+						<button class="btnCatTab"><i class="fa fa-list"></i><span>To Do</span></button>
+						<button class="btnCatTab"><i class="fa fa-external-link"></i><span>Export</span></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="mainContents col-xs-12">
+			<div class="main_1">
+				<div class="catContents col-xs-12">
+					<div class="row">
+						<div class="col-xs-3 mainCase">
+							<div class="caseTitle">
+								Cars
+							</div>
+							<div class="caseContent_1" style="padding-left: 10%;">
+								<div>Created</div>
+								<div id="caseInfoMD">December 19,</div>
+								<div id="caseInfoYT">2018 12:41 PM</div>
+								<div class="btn btn-success">Active Case</div>
+							</div>
+						</div>
+						<div class="col-xs-3 pageViewd">
+							<div class="caseTitle">
+								Page Viewed
+							</div>
+							<div class="caseContents caseViewed">
+								3
+							</div>
+						</div>
+						<div class="col-xs-3 photoTagged">
+							<div class="caseTitle">
+								Photos Tagged
+							</div>
+							<div class="caseContents casePhotos">
+								0
+							</div>
+						</div>
+						<div class="col-xs-3 noteCount">
+							<div class="caseTitle">
+								Note Count
+							</div>
+							<div class="caseContents caseNotes">
+								0
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="main_2">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="contentTabs btn-group">
+							<button class="btnContentTab activeTab"><i class="fa fa-briefcase"></i><span>History</span></button>
+							<button class="btnContentTab"><i class="fa fa-list"></i><span>Notes</span></button>
+							<button class="btnContentTab"><i class="fa fa-external-link"></i><span>Photos</span></button>
+							<button class="btnContentTab"><i class="fa fa-external-link"></i><span>Attachements</span></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="assets/settings.js"></script>
+</html>

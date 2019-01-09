@@ -11,35 +11,72 @@
   <title>Grabster</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="loginStyles.css">
+  <link rel="stylesheet" href="assets/switchbutton.css">
 </head>
-
+<style type="text/css">
+  .mainFields{
+    display: none;
+  }
+  #logForm input{
+    width: 100%;
+  }
+  .loginFields, .mainFields{
+    background-color: #57c4e9;
+  }
+</style>
 <body>
   <div class="container">
-    <div class="flex-wrap">
+    <div class="flex-wrap-1 loginFields row">
       <fieldset>
-        <form action novalidate id="logForm">
-          <input type="radio" name="rg" id="sign-in" checked />
-          <!-- <input type="radio" name="rg" id="sign-up" /> -->
-          <!-- <input type="radio" name="rg" id="reset" /> -->
+        <form action novalidate id="logForm" class="col-xs-12">
+          <input type="radio" name="rg" id="sign-in" checked style="display: none;" />
 
           <label for="sign-in">Sign in</label>
-          <!-- <label for="sign-up">Sign up</label> -->
-          <!-- <label for="reset">Reset</label> -->
 
           <input class="sign-up sign-in reset" type="email" placeholder="Email" id="log1"/>
           <input class="sign-up sign-in" type="password" placeholder="Password" id="pass1"/>
-          <!-- <input class="sign-up" type="password" placeholder="Repeat Password" /> -->
-          <button id="login"></button>
+          <button class="btn btn-primary col-xs-12" id="login"></button>
 
         </form>
-        <button id="logout" style="display: none">LOGOUT</button>
-        
 
       </fieldset>
     </div>
+    <div class="mainFields row">
+      <div class="col-xs-12">
+        <button id="btnDashboard" class="btn btn-success" style="float: right; width: auto; height: auto; margin-top: 10px;">Dashboard</button>
+        <div style="clear: both; height: 20px;"></div>
+        <div class="col-md-12 col-xs-12">
+          <div class="row">
+            <div class="col-md-5 col-xs-5">
+              <div class="row">
+                <span>
+                  Capture
+                </span>
+                <span>
+                  <label class="switch" style="top: -13px;">
+                    <input type="checkbox" checked>
+                    <span class="slider round"></span>
+                  </label>
+                </span>
+              </div>
+            </div>
+            <div class="col-md-7 col-xs-7">
+              <div class="row">
+                <span>Case</span>
+                <span>
+                  <select id="selTopic"></select>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="logout">LOGOUT</button>
+        <button class="btn btn-danger" id="btnEraseAll">Erase All Settings</button>
+      </div>
+    </div>
+
+
   </div>
 
-
 </body>
-
 </html>

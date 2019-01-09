@@ -26,10 +26,10 @@ input[type="radio"] {
     opacity: 1;
   }
   button {
-    width: 250px;
-    height: 40px;
+    /*width: 250px;*/
+    /*height: 40px;*/
     border-radius: 7px;
-    background-color: #16a085;
+    /*background-color: #16a085;*/
     font-size: 16;
   }
   button:before {
@@ -80,9 +80,9 @@ input[type="radio"] {
     
   }
   body {
-    background-color: #1abc9c;
+    /*background-color: #1abc9c;*/
     font-size: 16px;
-    
+    width: 400px;
     
   }
   
