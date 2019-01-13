@@ -1,5 +1,5 @@
-var reqUrl = "http://localhost/loger/api_context.php";
-// var reqUrl = "http://guu267.com/loger/api_context.php";
+// var reqUrl = "http://localhost/loger/api_context.php";
+var reqUrl = "http://guu267.com/loger/api_context.php";
 
 chrome.storage.sync.get('topics', function(data){
   var lstSubMenus = [];

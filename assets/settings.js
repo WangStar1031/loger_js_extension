@@ -1,8 +1,8 @@
-var reqUrl = "http://localhost/loger/api_context.php";
-var uploadUrl = "http://localhost/loger/fileUpload.php";
+// var reqUrl = "http://localhost/loger/api_context.php";
+// var uploadUrl = "http://localhost/loger/fileUpload.php";
 
-// var reqUrl = "http://guu267.com/loger/api_context.php";
-// var uploadUrl = "http://guu267.com/loger/fileUpload.php";
+var reqUrl = "http://guu267.com/loger/api_context.php";
+var uploadUrl = "http://guu267.com/loger/fileUpload.php";
 
 var arrContents = [];
 $(".btnCatTab").on('click', function(){
@@ -234,6 +234,29 @@ $("#btnNoteUpload").click(function(){
 			if(data){
 				getTopicInfo(topicName);
 				$("#NoteText").val("");
+			}
+		});
+	}
+});
+
+$("#btnNewTopic").click(function(){
+	topicName = prompt("Please enter new Topic name", "New Topic");
+	if (topicName != null) {
+		$.post(reqUrl, { action:"addTopic", token: loger_token, topic: topicName}, function(data){
+			if( data == "OK"){
+				chrome.contextMenus.create({
+					title: topicName,
+					contexts: ["all"],
+					id: topicName,
+					type: "radio",
+					onclick: function(info, tab){
+						_menuId = info.menuItemId;
+						chrome.storage.sync.set({topic:_menuId});
+						chrome.contextMenus.update(_menuId, {checked: true});
+					}
+				});
+			}else {
+				alert(data);
 			}
 		});
 	}

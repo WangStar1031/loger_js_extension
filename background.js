@@ -1,5 +1,5 @@
-var reqUrl = "http://localhost/loger/api_context.php";
-// var reqUrl = "http://guu267.com/loger/api_context.php";
+// var reqUrl = "http://localhost/loger/api_context.php";
+var reqUrl = "http://guu267.com/loger/api_context.php";
 
 function requestContent(token, url, content) {
     var request = new XMLHttpRequest();
@@ -89,9 +89,11 @@ function createContextMenus(topics){
                                     title: topicName,
                                     contexts: ["all"],
                                     id: topicName,
+                                    type: "radio",
                                     onclick: function(info, tab){
-                                      chrome.storage.sync.set({topic:_menuId});
-                                      chrome.contextMenus.update(_menuId, {checked: true});
+                                        _menuId = info.menuItemId;
+                                        chrome.storage.sync.set({topic:_menuId});
+                                        chrome.contextMenus.update(_menuId, {checked: true});
                                     }
                                 });
                             }else {
