@@ -2,11 +2,6 @@ var reqUrl = "http://localhost/loger/api_context.php";
 // var reqUrl = "http://guu267.com/loger/api_context.php";
 
 function requestContent(token, url, content) {
-    // $.get(url + "?action=addContents&token=" + token + "&contents=" + content, function(data){
-    //     if( window.confirm('OPEN NOTE ?')){
-    //         var newURL = data.responseText;
-    //     }
-    // });
     var request = new XMLHttpRequest();
     request.open('GET', url + "?action=addContents&token=" + token + "&contents=" + content, false);
     request.onreadystatechange = function (o) {
@@ -26,157 +21,6 @@ function requestContent(token, url, content) {
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     request.send();
 }
-function processMenuItems(_menuId){
-    chrome.storage.sync.get('loger_token', function(data){
-        if( !data.loger_token){
-            alert("Please log in.");
-            return;
-        }
-        var token = data.loger_token;
-        switch(_menuId){
-            case "Start":
-                chrome.storage.sync.set({action:"Start"});
-                break;
-            case "Stop":
-                chrome.storage.sync.set({action:"Stop"});
-                break;
-            default:
-                chrome.storage.sync.set({topic:_menuId});
-                var lstSubMenus = [];
-                lstSubMenus.push("Default");
-                var idx = lstSubMenus.indexOf(_menuId);
-                for( var i = 0; i < lstTopics.length; i++){
-                    lstSubMenus.push(lstTopics[i]);
-                }
-                for( var i = 0; i < lstSubMenus.length; i++){
-                    chrome.contextMenus.update(lstSubMenus[i], {checked: false});
-                }
-                chrome.contextMenus.update(_menuId, {checked: true});
-                break;
-        }
-        // alert("Processing : " + _menuId);
-    });
-}
-var topics = "";
-var lstTopics  = [];
-var topicName = "";
-chrome.runtime.onInstalled.addListener(function (info, tab) {
-    // When the app gets installed, set up the context menus
-    var tmInstalled = new Date();
-    alert(tmInstalled);
-
-    chrome.storage.sync.get('topics', function(data){
-        var lstSubMenus = [];
-        lstSubMenus.push("Default");
-        if( data.topics){
-            topics = data.topics;
-            lstTopics = topics.split("%%");
-            for( var i = 0; i < lstTopics.length; i++){
-                lstSubMenus.push(lstTopics[i]);
-            }
-        }
-        chrome.contextMenus.create({
-            title: "Start recording",
-            id: "Start",
-            type: "radio",
-            contexts: ["all"],
-            onclick: function (info, tab) {
-                processMenuItems(info.menuItemId);
-            }
-        });
-        chrome.contextMenus.create({
-            title: "Stop recording",
-            id: "Stop",
-            type: "radio",
-            contexts: ["all"],
-            onclick: function (info, tab) {
-                processMenuItems(info.menuItemId);
-            }
-        });
-        // chrome.contextMenus.create({type:'separator'});
-        // chrome.contextMenus.create({
-        //     type: "separator"
-        // });
-        chrome.contextMenus.create({"title": "Separator Context Menu", "type": "separator"});
-        chrome.contextMenus.create({
-            title: "Create Topic",
-            id: "Create",
-            contexts: ["all"],
-            onclick: function (info, tab) {
-                topicName = prompt("Please enter new Topic name", "New Topic");
-                if (topicName != null) {
-                    if( lstTopics.indexOf(topicName) == -1){
-                        
-                        chrome.storage.sync.get('topics', function(data){
-                            if( data.topics){
-                                topics = data.topics;
-                                lstTopics = topics.split("%%");
-                                lstTopics.push(topicName);
-                                topics = lstTopics.join("%%");
-                                chrome.storage.sync.set({topics:topics});
-
-                                chrome.storage.sync.get('loger_token', function(data){
-                                    if( !data.loger_token){
-                                        return;
-                                    }
-                                    activeToken = data.loger_token;
-                                    $.post( reqUrl, {action:"addTopic", token: activeToken, topic: topics}, function(data){
-                                    });
-                                    chrome.contextMenus.create({
-                                        title: topicName,
-                                        contexts: ["all"],
-                                        id: topicName,
-                                        onclick: function(info, tab){
-                                            processMenuItems(info.menuItemId);
-                                        }
-                                    });
-                                });
-                            } else{
-                                topics = "";
-                                lstTopics = [];
-                                lstTopics.push(topicName);
-                                topics = lstTopics.join("%%");
-                                chrome.storage.sync.set({topics:topics});
-
-                                chrome.storage.sync.get('loger_token', function(data){
-                                    if( !data.loger_token){
-                                        return;
-                                    }
-                                    activeToken = data.loger_token;
-                                    $.post( reqUrl, {action:"addTopic", token: activeToken, topic: topics}, function(data){
-                                    });
-                                    chrome.contextMenus.create({
-                                        title: topicName,
-                                        contexts: ["all"],
-                                        id: topicName,
-                                        onclick: function(info, tab){
-                                            processMenuItems(info.menuItemId);
-                                        }
-                                    });
-                                });
-                            }
-                        });
-                    } else{
-                        alert("Topic already exists.");
-                    }
-                }
-            }
-        });
-        for( var i = 0; i < lstSubMenus.length; i++){
-            var title = lstSubMenus[i];
-            chrome.contextMenus.create({
-                title: title,
-                id: title,
-                type: "checkbox",
-                contexts: ["all"],
-                onclick: function (info, tab) {
-                    processMenuItems(info.menuItemId);
-                }
-            });
-        }
-        chrome.contextMenus.update(lstSubMenus[0], {checked: true});
-    });
-});
 function sendContents(_data){
     chrome.storage.sync.get('loger_token', function(data){
         if( !data.loger_token){
@@ -204,18 +48,98 @@ function sendContents(_data){
     });
 }
 
+function createContextMenus(topics){
+  chrome.contextMenus.create({
+      title: "Stop recording",
+      id: "Stop",
+      type: "radio",
+      contexts: ["all"],
+      onclick: function (info, tab) {
+        chrome.storage.sync.set({action:"Stop"});
+      }
+  });
+  chrome.contextMenus.create({
+      title: "Start recording",
+      id: "Start",
+      type: "radio",
+      contexts: ["all"],
+      onclick: function (info, tab) {
+        chrome.storage.sync.set({action:"Start"});
+      }
+  });
+
+  chrome.contextMenus.create({"title": "Separator Context Menu", "type": "separator"});
+  
+    chrome.contextMenus.create({
+        title: "Create Topic",
+        id: "Create",
+        contexts: ["all"],
+        onclick: function (info, tab) {
+            topicName = prompt("Please enter new Topic name", "New Topic");
+            if (topicName != null) {
+                if( lstTopics.indexOf(topicName) == -1){
+                    chrome.storage.sync.get('loger_token', function(data){
+                        if( !data.loger_token){
+                            return;
+                        }
+                        activeToken = data.loger_token;
+                        $.post(reqUrl, { action:"addTopic", token: activeToken, topic: topicName}, function(data){
+                            if( data == "OK"){
+                                chrome.contextMenus.create({
+                                    title: topicName,
+                                    contexts: ["all"],
+                                    id: topicName,
+                                    onclick: function(info, tab){
+                                      chrome.storage.sync.set({topic:_menuId});
+                                      chrome.contextMenus.update(_menuId, {checked: true});
+                                    }
+                                });
+                            }else {
+                                alert(data);
+                            }
+                        });
+                    });
+                } else{
+                    alert("Topic already exists.");
+                }
+            }
+        }
+    });
+  chrome.contextMenus.create({"title": "Separator Context Menu", "type": "separator"});
+  lstTopics = topics.split("%%");
+  for( var i = 0; i < lstTopics.length; i++){
+      // lstSubMenus.push(lstTopics[i]);
+      var title = lstTopics[i];
+      chrome.contextMenus.create({
+          title: title,
+          id: title,
+          type: "radio",
+          contexts: ["all"],
+          onclick: function (info, tab) {
+              // processMenuItems(info.menuItemId);
+              _menuId = info.menuItemId;
+                chrome.storage.sync.set({topic:_menuId});
+                chrome.contextMenus.update(_menuId, {checked: true});
+          }
+      });
+  }
+  chrome.contextMenus.update(lstTopics[0], {checked: true});
+}
+
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        if (request == "ex_pageLoaded"){
+        if (request.cat == "ex_pageLoaded"){
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                 chrome.tabs.executeScript( tabs[0].id, {file: "getDOM.js"}, function(result){
                     if( !result){
                         // alert("Non contents");
                         return;
                     }
-                    sendContents(encodeURIComponent(result));
+                    sendContents(encodeURIComponent(result + "|||||" + request.image));
                 });
             });
+        } else if( request.cat == "ex_CreateContextMenus"){
+            createContextMenus(request.topics);
         }
     }
 );

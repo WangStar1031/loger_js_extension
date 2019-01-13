@@ -35,7 +35,7 @@ input[type="radio"] {
   button:before {
     font-size: 16px;
   }
-  [id="sign-in"]:checked ~ button:before {
+  /*[id="sign-in"]:checked ~ button:before {
     content: 'Sign In';
   }
   [id="sign-up"]:checked ~ button:before {
@@ -43,7 +43,7 @@ input[type="radio"] {
   }
   [id="reset"]:checked ~ button:before {
     content: 'Reset password';
-  }
+  }*/
   
   label {
     position: relative;

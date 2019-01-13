@@ -6,7 +6,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<script src="jquery.min.js"></script>
-	<script src="include.js"></script>
 	<title>Grabster</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<link rel="stylesheet" href="assets/settings.css">
@@ -40,7 +39,7 @@
 					<div class="catTabs btn-group">
 						<button class="btnCatTab activeTab"><i class="fa fa-briefcase"></i><span>Case</span></button>
 						<button class="btnCatTab"><i class="fa fa-list"></i><span>To Do</span></button>
-						<button class="btnCatTab"><i class="fa fa-external-link"></i><span>Export</span></button>
+						<button class="btnCatTab" style="display: none;"><i class="fa fa-external-link"></i><span>Export</span></button>
 					</div>
 				</div>
 			</div>
@@ -48,15 +47,15 @@
 		<div class="mainContents col-xs-12">
 			<div class="main_1">
 				<div class="catContents col-xs-12">
-					<div class="row">
+					<div class="row catCase cat_case">
 						<div class="col-xs-3 mainCase">
-							<div class="caseTitle">
-								Cars
+							<div class="caseTitle" id="topicTitle">
+								
 							</div>
 							<div class="caseContent_1" style="padding-left: 10%;">
 								<div>Created</div>
-								<div id="caseInfoMD">December 19,</div>
-								<div id="caseInfoYT">2018 12:41 PM</div>
+								<div id="caseInfoMD"> </div>
+								<div id="caseInfoYT"> </div>
 								<div class="btn btn-success">Active Case</div>
 							</div>
 						</div>
@@ -64,26 +63,38 @@
 							<div class="caseTitle">
 								Page Viewed
 							</div>
-							<div class="caseContents caseViewed">
-								3
+							<div class="caseContents" id="caseViewed">
+								
 							</div>
 						</div>
 						<div class="col-xs-3 photoTagged">
 							<div class="caseTitle">
 								Photos Tagged
 							</div>
-							<div class="caseContents casePhotos">
-								0
+							<div class="caseContents" id="casePhotos">
+								
 							</div>
 						</div>
 						<div class="col-xs-3 noteCount">
 							<div class="caseTitle">
 								Note Count
 							</div>
-							<div class="caseContents caseNotes">
-								0
+							<div class="caseContents" id="caseNotes">
+								
 							</div>
 						</div>
+					</div>
+					<div class="row catCase todo_case" style="display: none;">
+						<div class="col-xs-8">
+							<ul id="todolist"></ul>
+						</div>
+						<div class="col-xs-4">
+							<textarea rows="4" style="width: 100%;" id="todoText"></textarea>
+							<button class="btn btn-primary" id="btnUpload">Upload</button>
+						</div>
+					</div>
+					<div class="row catCase export_case" style="display: none;">
+						This is Export case
 					</div>
 				</div>
 			</div>
@@ -93,8 +104,57 @@
 						<div class="contentTabs btn-group">
 							<button class="btnContentTab activeTab"><i class="fa fa-briefcase"></i><span>History</span></button>
 							<button class="btnContentTab"><i class="fa fa-list"></i><span>Notes</span></button>
-							<button class="btnContentTab"><i class="fa fa-external-link"></i><span>Photos</span></button>
-							<button class="btnContentTab"><i class="fa fa-external-link"></i><span>Attachements</span></button>
+							<button class="btnContentTab"><i class="fa fa-picture-o"></i><span>Photos</span></button>
+							<button class="btnContentTab"><i class="fa fa-paperclip"></i><span>Attachements</span></button>
+						</div>
+						<div class="row historyCase">
+							<div class="col-xs-12">
+								<div class="bellowContents">
+									<ul id="historyList"></ul>
+								</div>
+								<div class="bellowContents col-xs-12" style="display: none;">
+									<div class="col-xs-8">
+										<ul id="notesList"></ul>
+									</div>
+									<div class="col-xs-4">
+										<textarea rows="4" style="width: 100%;" id="NoteText"></textarea>
+										<button class="btn btn-primary" id="btnNoteUpload">Upload</button>
+									</div>
+								</div>
+								<div class="bellowContents col-xs-12" style="display: none;">
+									<div class="row">
+										<div class="col-xs-8 imageGallary">
+										</div>
+										<div class="col-xs-4">
+	<form id="photoUpload" method="post" enctype="multipart/form-data">
+	<input id="uploadImage" type="file" accept="image/*" name="uploadFile" />
+	<!-- <div id="preview"><img src="assets/filed.png" style="width: 100px;" /></div><br> -->
+	<input class="btn btn-success" type="submit" value="Upload">
+	<input type="hidden" name="token">
+	<input type="hidden" name="topicName">
+	<input type="hidden" name="type" value="photos">
+	</form>								
+										</div>
+									</div>
+								</div>
+								<div class="bellowContents" style="display: none;">
+									<div class="row">
+										<div class="col-xs-8 attachements">
+											<ul></ul>
+										</div>
+										<div class="col-xs-4">
+	<form id="attachementsUpload" method="post" enctype="multipart/form-data">
+	<input id="uploadImage" type="file" name="uploadFile" />
+	<!-- <div id="preview"><img src="assets/filed.png" style="width: 100px;" /></div><br> -->
+	<input class="btn btn-success" type="submit" value="Upload">
+	<input type="hidden" name="token">
+	<input type="hidden" name="topicName">
+	<input type="hidden" name="type" value="attachements">
+	</form>								
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

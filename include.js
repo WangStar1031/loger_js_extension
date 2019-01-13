@@ -3,7 +3,6 @@ var reqUrl = "http://localhost/loger/api_context.php";
 
 chrome.storage.sync.get('topics', function(data){
   var lstSubMenus = [];
-  lstSubMenus.push("Default");
   if( data.topics){
       topics = data.topics;
       lstTopics = topics.split("%%");
@@ -11,10 +10,22 @@ chrome.storage.sync.get('topics', function(data){
           lstSubMenus.push(lstTopics[i]);
       }
   }
-  for( var i = 0; i < lstSubMenus.length; i++){
-    $("#selTopic").append("<option>" + lstSubMenus[i] + "</option>");
-  }
+  chrome.storage.sync.get('topic', function(topic){
+   if( topic.topic){
+     var curTopic = topic.topic;
+     for( var i = 0; i < lstSubMenus.length; i++){
+       var strHtml = "";
+       strHtml += "<option";
+       if( curTopic == lstSubMenus[i]){
+         strHtml += " selected";
+       }
+       strHtml += ">" + lstSubMenus[i] + "</option>";
+       $("#selTopic").append(strHtml);
+     }
+   }
+  });
 });
+
 chrome.storage.sync.get('loger_token', function(data){
   if( data.loger_token){
     $(".loginFields").hide();
@@ -22,54 +33,80 @@ chrome.storage.sync.get('loger_token', function(data){
   }
 });
 
-function requestLogin(url,log1,pass1){
-  var request = new XMLHttpRequest();
-  request.open('GET',url+"?action=verifyUser&email="+log1+"&pass="+pass1, false);
-  request.onreadystatechange = function (o){
-      if(request.readyState === XMLHttpRequest.DONE && request.status === 200) {
-        chrome.storage.sync.set({loger_token:request.responseText});
-        if( !request.responseText ){
-          alert("Login failed.");
-        } else{
-          alert("Successfully logged in.");
-        }
-      }else if(request.readyState === XMLHttpRequest.DONE && request.status !== 200){
-          console.log('ERROR REQUEST STATUS = ' + request.status);
-      }
-  };
-  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  request.send();
-}
-
+chrome.storage.sync.get('action', function(action){
+  if( action.action){
+    var act = action.action;
+    if( act == "Stop"){
+      $("input[type=checkbox]").prop("checked", false);
+    } else{
+      $("input[type=checkbox]").prop("checked", true);
+    }
+  }
+});
 $(function () {
-  $("#login").click(function () {
-    // requestLogin("http://siblola.pythonanywhere.com/auth",$("#log1").val(),$("#pass1").val()); 
-    requestLogin( reqUrl,$("#log1").val(),$("#pass1").val()); 
+  $("#selTopic").change(function(){
+    var topic = $("#selTopic option:selected").html();
+    console.log(topic);
+    chrome.storage.sync.set({topic:topic});
+    chrome.contextMenus.update(topic, {checked: true});
+
   });
+
+  $("input[type=checkbox]").change(function(){
+    if( this.checked){
+      chrome.storage.sync.set({action:"Start"});
+      chrome.contextMenus.update("Start", {checked: true});
+    } else{
+      chrome.storage.sync.set({action:"Stop"});
+      chrome.contextMenus.update("Stop", {checked: true});
+    }
+  });
+
   $("#btnEraseAll").click(function(){
     chrome.storage.sync.set({loger_token:""});
     chrome.storage.sync.set({topics:""});
+    chrome.contextMenus.removeAll();
+    location.reload();
   });
 
   $("#logout").click(function () {
-    localStorage["ext_user_token1"] = "logout";
     chrome.storage.sync.set({loger_token:""});
+    chrome.contextMenus.removeAll();
     location.reload();
   });
   $("#btnDashboard").click(function(){
     chrome.tabs.create({ url: "options.html" });
-    // chrome.tabs.create({ 'url': 'chrome://extensions/?options=' + chrome.runtime.id });
   });
-  $(window).load(function () {
-    if((localStorage["ext_user_token1"]!==undefined)&&(localStorage["ext_user_token1"]!=="logout")){
-      $('#logForm').hide()
-      // $('#logout').show()
-    }
-    if(localStorage["ext_user_token1"]=="logout"){
-      // $('#logout').hide()
-      $('#logForm').show()
+
+  $("#login").click(function () {
+    var email = $("#log1").val();
+    var pass = $("#pass1").val();
+    $.get( reqUrl + "?action=verifyUser&email="+email+"&pass="+pass, function(retVal){
+      chrome.storage.sync.set({loger_token: retVal});
+      if( retVal){
+        $.post(reqUrl, {action:"getTopics", token: retVal}, function(data){
+          chrome.storage.sync.set({'topics': data});
+          chrome.contextMenus.removeAll();
+          chrome.runtime.sendMessage({cat:"ex_CreateContextMenus", topics:data});
+        });
+        alert("Successfully logged in.");
+        location.reload();
+      } else{
+        alert("Login failed.");
+      }
+    });
+  });
+  $("#log1").keydown(function(e){
+    if( e.which == 13){
+      $("#pass1").focus();
     }
   });
+  $("#pass1").keydown(function(e){
+    if( e.which == 13){
+      $("#login").click();
+    }
+  })
+
 });
 
 

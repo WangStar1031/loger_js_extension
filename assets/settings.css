@@ -45,6 +45,11 @@
 		border-top: 1px solid #ccc;
 		padding-bottom: 15px;
 	}
+	.bellowContents{
+		background-color: white;
+		min-height: 50px;
+		padding: 10px;
+	}
 	.catContents{
 		margin-bottom: 15px;
 		background-color: white;
@@ -63,4 +68,17 @@
 		background: linear-gradient(to bottom, #30CFD0 0%, #330867 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
+	}
+	.img_contents {
+		width: 70px;
+		height: 70px;
+	}
+	li{
+		list-style: none;
+		/*padding: 10px;*/
+	}
+	.imageGallary img{
+		width: 200px;
+		height: 150px;
+		margin: 10px;
 	}

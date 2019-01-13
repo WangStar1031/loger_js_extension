@@ -49,7 +49,7 @@
         {
             "run_at": "document_end",
             "matches": ["<all_urls>"],
-            "js": ["jquery.min.js", "contentScript.js"]
+            "js": ["jquery.min.js", "assets/html2canvas.js", "contentScript.js"]
         }
     ]
 }
